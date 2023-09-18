@@ -1,0 +1,5 @@
+.vagrant
+__pycache__
+.DS_Store
+acme-ansible/collections/ansible_collections/*
+!acme-ansible/collections/ansible_collections/acme/

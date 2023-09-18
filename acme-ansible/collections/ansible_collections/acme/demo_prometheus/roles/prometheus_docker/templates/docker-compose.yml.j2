@@ -1,0 +1,23 @@
+# {{ ansible_managed }}
+services:
+  prometheus:
+    container_name: prometheus
+    image: prom/prometheus
+    restart: unless-stopped
+    volumes:
+      - /opt/docker/prometheus/:/etc/prometheus/
+      - prometheus-data:/prometheus/
+  grafana:
+    container_name: grafana
+    environment:
+      - GF_FEATURE_TOGGLES_ENABLE=publicDashboards
+    image: grafana/grafana-oss
+    ports:
+      - '3000:3000'
+    restart: unless-stopped
+    volumes:
+      - /opt/docker/grafana/:/etc/grafana/provisioning/
+      - grafana_data:/var/lib/grafana/
+volumes:
+  grafana_data: {}
+  prometheus-data: {}

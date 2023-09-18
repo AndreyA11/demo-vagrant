@@ -1,0 +1,2 @@
+# -A INPUT -s 172.16/12 -p tcp -m tcp --dport 3000 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
+-A INPUT -p tcp -m tcp --dport 3000 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT

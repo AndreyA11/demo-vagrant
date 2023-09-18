@@ -1,0 +1,8 @@
+node_exporter_basic_auth_users: {
+  prometheus: "{{lookup('ansible.builtin.file', '/tmp/node_exporter_passwd') }}"
+}
+node_exporter_tls_server_config: {
+  cert_file: /etc/node_exporter/tls.cert,
+  key_file: /etc/node_exporter/tls.key
+}
+node_exporter_tls_server_config_csr_path: /etc/node_exporter/tls.csr

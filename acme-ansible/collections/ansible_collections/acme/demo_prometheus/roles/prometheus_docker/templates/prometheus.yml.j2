@@ -1,0 +1,15 @@
+# {{ ansible_managed }}
+global:
+  scrape_interval: 15s
+
+scrape_configs:
+  - job_name: docker-engine
+    static_configs:
+      - targets: ['{{ ansible_facts.docker0.ipv4.address }}:9100']
+    basic_auth:
+      username: "prometheus"
+      password: "{{ lookup('ansible.builtin.file', '/tmp/node_exporter_passwd') }}"
+    scheme: https
+    metrics_path: /metrics
+    tls_config:
+      insecure_skip_verify: true

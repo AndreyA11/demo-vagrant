@@ -1,0 +1,13 @@
+# {{ ansible_managed }}
+
+apiVersion: 1
+datasources:
+  - name: Prometheus
+    # <string, required> Sets the data source type.
+    type: prometheus
+    access: proxy
+    orgId: 1
+    url: http://{{ prometheus_uri }}
+    isDefault: true
+    version: 1
+    editable: false

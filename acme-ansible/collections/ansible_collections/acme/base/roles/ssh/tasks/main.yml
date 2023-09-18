@@ -1,0 +1,17 @@
+- name: Allow passwordless sudo
+  ansible.builtin.lineinfile:
+    dest: /etc/sudoers
+    regexp: '^%sudo'
+    line: '%sudo ALL=(ALL) NOPASSWD: ALL'
+    validate: 'visudo -cf %s'
+
+- name: Create authorized_keys directory
+  ansible.builtin.file:
+    path: /etc/ssh/authorized_keys/
+    state: directory
+
+- name: Configure SSH server
+  ansible.builtin.template:
+    src: sshd_config.j2
+    dest: /etc/ssh/sshd_config
+  notify: Reload sshd

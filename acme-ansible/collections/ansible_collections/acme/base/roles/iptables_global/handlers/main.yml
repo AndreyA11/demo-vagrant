@@ -1,0 +1,10 @@
+- name: iptables-restore
+  ansible.builtin.shell:
+    cmd: iptables-restore < /etc/iptables/rules.v4
+  notify: docker restart
+
+- name: docker restart
+  ansible.builtin.systemd:
+    state: restarted
+    name: docker
+  when: (ansible_facts.services.docker.state == 'running')

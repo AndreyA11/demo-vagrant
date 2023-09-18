@@ -1,0 +1,66 @@
+- name: Install dependencies
+  ansible.builtin.apt:
+    name:
+      # - python3-pip
+      - python3-virtualenv
+    update_cache: yes
+
+- name: Install python package
+  ansible.builtin.pip:
+    name: docker-compose
+    virtualenv: /opt/docker/python-venv/
+
+- name: Create directory
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+  loop:
+    - /opt/docker/compose/
+    - /opt/docker/grafana/dashboards/prometheus-dashboard/
+    - /opt/docker/grafana/datasources/
+    - /opt/docker/prometheus/
+
+- name: Rebuild ansible_facts
+  setup:
+
+- name: Configure Prometheus
+  ansible.builtin.template:
+    src: prometheus.yml.j2
+    dest: /opt/docker/prometheus/prometheus.yml
+  notify: Restart prometheus
+
+- block:
+  - name: Configure Grafana
+    ansible.builtin.template:
+      src: "{{ item.src }}"
+      dest: "{{ item.dest }}"
+    loop:
+      - {
+        src: prometheus-dashboard.yml.j2,
+        dest: /opt/docker/grafana/dashboards/prometheus-dashboard.yml
+      }
+      - {
+        src: grafana_data_source.yml.j2,
+        dest: /opt/docker/grafana/datasources/grafana_data_source.yml
+      }
+
+  - name: Copy dashboard
+    ansible.builtin.copy:
+      src: templates/dashboard_1860_rev32.json
+      dest: /opt/docker/grafana/dashboards/prometheus-dashboard/dashboard_1860_rev32.json
+  notify: Restart grafana
+
+- name: Template compose file
+  ansible.builtin.template:
+    src: docker-compose.yml.j2
+    dest: /opt/docker/compose/docker-compose.yml
+
+- name: Create and start services
+  community.docker.docker_compose:
+    project_src: /opt/docker/compose/
+  vars:
+    ansible_python_interpreter: /opt/docker/python-venv/bin/python3
+
+- name: Set iptables fact
+  ansible.builtin.set_fact:
+    rules_filter: "{{ rules_filter + [lookup('template', 'templates/rules.v4.j2')] }}"

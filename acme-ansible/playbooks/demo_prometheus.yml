@@ -1,0 +1,10 @@
+- hosts: "{{ cli_target|default('all') }}"
+  become: true
+  roles:
+    - acme.base.ntp_timezone
+    - acme.base.ssh
+    - acme.base.users
+    - acme.demo_prometheus.node_exporter_install
+    - acme.base.docker
+    - acme.demo_prometheus.prometheus_docker
+    - acme.base.iptables_global

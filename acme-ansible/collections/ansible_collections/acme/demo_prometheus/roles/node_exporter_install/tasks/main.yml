@@ -1,0 +1,50 @@
+- name: Install dependencies
+  ansible.builtin.apt:
+    name:
+      - python3-passlib
+
+- name: Create node_exporter cert dir
+  ansible.builtin.file:
+    path: "/etc/node_exporter"
+    state: directory
+    owner: root
+    group: root
+
+- name: Check if certificate exists
+  ansible.builtin.stat:
+    path: "{{ node_exporter_tls_server_config.cert_file }}"
+  register: check_cert_file
+
+- block:
+  - name: Generate an OpenSSL private key with the default values (4096 bits, RSA)
+    community.crypto.openssl_privatekey:
+      path: "{{ node_exporter_tls_server_config.key_file }}"
+
+  - name: Generate an OpenSSL Certificate Signing Request
+    community.crypto.openssl_csr:
+      path: "{{ node_exporter_tls_server_config_csr_path }}"
+      privatekey_path: "{{ node_exporter_tls_server_config.key_file }}"
+      common_name: "{{ ansible_host }}"
+
+  - name: Create certificate
+    community.crypto.x509_certificate:
+      csr_path: "{{ node_exporter_tls_server_config_csr_path }}"
+      path: "{{ node_exporter_tls_server_config.cert_file }}"
+      privatekey_path: "{{ node_exporter_tls_server_config.key_file }}"
+      provider: selfsigned
+  when: not check_cert_file.stat.exists
+
+- name: Import prometheus.node_exporter role
+  ansible.builtin.import_role:
+    name: prometheus.prometheus.node_exporter
+
+- name: Create node_exporter cert dir
+  ansible.builtin.file:
+    path: "{{ item.value }}"
+    group: node-exp
+    owner: node-exp
+  loop: "{{ node_exporter_tls_server_config | dict2items }}"
+
+- name: Set iptables fact
+  ansible.builtin.set_fact:
+    rules_filter: "{{ rules_filter + [lookup('template', 'templates/rules.v4.j2')] }}"

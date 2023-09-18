@@ -1,0 +1,25 @@
+# {{ ansible_managed }}
+
+PubkeyAuthentication yes
+AuthenticationMethods publickey
+AuthorizedKeysFile /etc/ssh/authorized_keys/%u
+MaxAuthTries 4
+UsePAM yes
+UseDNS no
+
+X11Forwarding no
+AllowTcpForwarding {{ (permit_tcp_forwarding) | ternary('yes', 'no') }}
+ClientAliveInterval 1800
+ClientAliveCountMax 2
+
+LogLevel INFO
+PasswordAuthentication no
+PermitRootLogin no
+PermitEmptyPasswords no
+PermitUserEnvironment no
+IgnoreRhosts yes
+HostbasedAuthentication no
+RhostsRSAAuthentication no
+PermitTunnel no
+
+Subsystem	sftp	/usr/lib/openssh/sftp-server

@@ -1,0 +1,15 @@
+- name: Restart prometheus
+  community.docker.docker_compose:
+    project_src: /opt/docker/compose/
+    restarted: true
+    services: prometheus
+  vars:
+    ansible_python_interpreter: /opt/docker/python-venv/bin/python3
+
+- name: Restart grafana
+  community.docker.docker_compose:
+    project_src: /opt/docker/compose/
+    restarted: true
+    services: grafana
+  vars:
+    ansible_python_interpreter: /opt/docker/python-venv/bin/python3

@@ -1,0 +1,31 @@
+# {{ ansible_managed }}
+{% if rules_filter[0] is defined %}
+*filter
+:INPUT DROP
+:FORWARD DROP
+:OUTPUT ACCEPT
+{%   for item in rules_filter %}
+{{     item }}
+
+{%   endfor %}
+COMMIT
+{% endif %}
+
+{% if rules_mangle[0] is defined %}
+*mangle
+{%   for item in rules_mangle %}
+{{     item }}
+
+{%   endfor %}
+COMMIT
+{% endif %}
+
+{% if rules_nat[0] is defined %}
+*nat
+{%   for item in rules_nat %}
+{{     item }}
+
+{%   endfor %}
+COMMIT
+{% endif %}
+

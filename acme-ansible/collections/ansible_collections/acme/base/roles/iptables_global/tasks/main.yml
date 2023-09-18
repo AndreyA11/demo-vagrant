@@ -1,0 +1,27 @@
+- name: Remove ufw
+  apt:
+    name: ufw
+    state: absent
+
+- name: Install iptables-persistent
+  apt:
+    name: iptables-persistent
+
+- name: Iptables template
+  ansible.builtin.template:
+    src: rules.v4.j2
+    dest: /etc/iptables/rules.v4
+  notify: iptables-restore
+
+- name: Enable startup
+  ansible.builtin.systemd:
+    name: netfilter-persistent
+    enabled: yes
+
+- name: Disable IPv6
+  ansible.posix.sysctl:
+    name: net.ipv6.conf.all.disable_ipv6
+    value: '1'
+
+- name: Populate service facts
+  ansible.builtin.service_facts:

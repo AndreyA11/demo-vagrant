@@ -1,0 +1,22 @@
+- name: Create users
+  ansible.builtin.user:
+    name: "{{ item.username }}"
+    groups:
+    - sudo
+    shell: /bin/bash
+  loop: "{{ users }}"
+
+- name: Copy public keys
+  ansible.builtin.copy:
+    content: "{{ item.public_key}}"
+    dest: "/etc/ssh/authorized_keys/{{ item.username }}"
+    owner: root
+    group: root
+    mode: 0644
+  loop: "{{ users }}"
+
+- name: Remove users
+  ansible.builtin.user:
+    name: "{{ item }}"
+    state: absent
+  loop: "{{ users_removed }}"

@@ -1,0 +1,8 @@
+- hosts: "{{ cli_target|default('all') }}"
+  # collections:
+  #   - acme.base
+  roles:
+    - acme.base.ntp_timezone
+    - acme.base.users
+    - acme.base.ssh
+    - acme.base.iptables_global
