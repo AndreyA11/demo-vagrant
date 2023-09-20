@@ -2,6 +2,7 @@
   become: true
   roles:
     - acme.base.ntp_timezone
+    - acme.base.apt_update
     - acme.base.ssh
     - acme.base.users
     - acme.demo_prometheus.node_exporter_install

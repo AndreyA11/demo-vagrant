@@ -21,7 +21,7 @@
     - /opt/docker/prometheus/
 
 - name: Rebuild ansible_facts
-  setup:
+  ansible.builtin.setup:
 
 - name: Configure Prometheus
   ansible.builtin.template:

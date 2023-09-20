@@ -54,15 +54,13 @@ Demonstration example of configuring VM using vagrant with ansible for starting 
    ```sh
    vagrant up
    ```
-5. Vagrant will ask your local computer credentials for configuring smb share connection inside the VM
+5. Vagrant may ask your local computer credentials for configuring smb share connection inside the VM
 6. Start provisioning again if something like internet connection was broken
    ```sh
    vagrant provision
    ```
-7. Open [localhost:3000](http://localhost:3000/) when you'll get "configuration complete" message. Also, you can use VM's ip address ![vm ip Screen Shot][vm_ip-screenshot]
-8. Enter login `admin` and password `admin`, click Log In -> skip
-9. Open Toggle menu -> Dashboards -> General -> Node Exporter Full
-10. Choose docker-engine job
+7. Open [localhost:3000](http://localhost:3000/) when you'll get "configuration complete" message. Hyper-V provider doesn't support port forwarding. In this case you can use VM's ip address as an alternative: ![complete-screenshot][complete-screenshot]
+8. Choose docker-engine job
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
@@ -103,4 +101,3 @@ Project Link: [https://github.com/AndreiA11/demo-vagrant](https://github.com/And
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [complete-screenshot]: images/complete-screenshot.png
-[vm_ip-screenshot]: images/vm_ip-screenshot.png

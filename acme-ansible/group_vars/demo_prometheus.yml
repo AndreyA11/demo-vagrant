@@ -1,0 +1,5 @@
+users:
+  - {
+    username: vagrant,
+    public_key: "{{ lookup('ansible.builtin.file', '/home/vagrant/.ssh/authorized_keys') }}"
+  }

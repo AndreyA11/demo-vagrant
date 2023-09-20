@@ -3,6 +3,7 @@
   #   - acme.base
   roles:
     - acme.base.ntp_timezone
-    - acme.base.users
+    - acme.base.apt_update
     - acme.base.ssh
+    - acme.base.users
     - acme.base.iptables_global

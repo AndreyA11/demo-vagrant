@@ -1,10 +1,3 @@
-permit_tcp_forwarding: false
 rules_filter: ["{{ lookup('template', '../templates_global/global_rules.j2') }}"]
 rules_mangle: []
 rules_nat: []
-users:
-  - {
-    username: vagrant,
-    public_key: "{{ lookup('ansible.builtin.file', '/home/vagrant/.ssh/authorized_keys') }}"
-  }
-users_removed: []

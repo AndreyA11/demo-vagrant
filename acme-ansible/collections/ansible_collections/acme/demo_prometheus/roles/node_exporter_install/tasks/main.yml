@@ -1,7 +1,7 @@
-- name: Install dependencies
-  ansible.builtin.apt:
-    name:
-      - python3-passlib
+# - name: Install dependencies
+#   ansible.builtin.apt:
+#     name:
+#       - python3-passlib
 
 - name: Create node_exporter cert dir
   ansible.builtin.file:
@@ -38,7 +38,7 @@
   ansible.builtin.import_role:
     name: prometheus.prometheus.node_exporter
 
-- name: Create node_exporter cert dir
+- name: Change cert owner to node-exp
   ansible.builtin.file:
     path: "{{ item.value }}"
     group: node-exp
